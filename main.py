@@ -99,7 +99,7 @@ def show_task_table():
         with col1:
             if st.button(f"📋 {task['Task']}", key=f"task_{task['id']}", help="點擊查看任務詳情"):
                 st.session_state.current_task = task
-                st.switch_page("pages/task_detail.py")
+                st.switch_page("task_detail.py")
         with col2:
             st.write(f"開始: {task['Start']}")
         with col3:
