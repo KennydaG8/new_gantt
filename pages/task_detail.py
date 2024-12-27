@@ -139,7 +139,8 @@ if current_task:
     
     with col1:
         if st.button("返回甘特圖", type="primary", key="return_button"):
-            st.switch_page("Main.py")
+            st.query_params.clear()
+            st.rerun()
     
     # 只有管理員可以使用這些功能
     if st.session_state.role == "admin":
