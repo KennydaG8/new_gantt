@@ -19,6 +19,70 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# 添加 Material Design Lite CSS 和 JS
+st.markdown("""
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <style>
+    .mdl-layout__header {
+        background-color: #3f51b5;
+    }
+    .mdl-layout__drawer-button {
+        color: white;
+    }
+    .mdl-button--fab.mdl-button--colored {
+        background-color: #ff4081;
+    }
+    .mdl-card {
+        min-height: 100px;
+        width: 100%;
+        margin-bottom: 20px;
+        padding: 16px;
+    }
+    .mdl-card__title {
+        color: #3f51b5;
+    }
+    .mdl-data-table {
+        width: 100%;
+    }
+    .metric-card {
+        background: white;
+        border-radius: 4px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+    }
+    .metric-value {
+        font-size: 24px;
+        font-weight: bold;
+        color: #3f51b5;
+    }
+    .metric-label {
+        color: #666;
+        font-size: 14px;
+    }
+    .stButton > button {
+        background-color: #3f51b5;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 16px;
+        text-transform: uppercase;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+    }
+    .task-row {
+        background: white;
+        padding: 12px;
+        border-radius: 4px;
+        margin-bottom: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+
 # 初始化 session state
 
 
@@ -37,6 +101,21 @@ if 'current_task' not in st.session_state:
     
 def show_task_table():
     for task in st.session_state.tasks:
+        st.markdown(f"""
+            <div class="task-row">
+                <div class="mdl-grid">
+                    <div class="mdl-cell mdl-cell--8-col">
+                        <h4 style="margin:0">{task['Task']}</h4>
+                        <small>開始: {task['Start']} | 結束: {task['Finish']} | 狀態: {task['Status']}</small>
+                    </div>
+                    <div class="mdl-cell mdl-cell--4-col" style="text-align:right">
+                        <div class="progress-info">
+                            進度: {calculate_progress(task):.1f}%
+                        </div>
+                    </div>
+                </div>
+            </div>
+        """, unsafe_allow_html=True)
         col1, col2, col3, col4, col5 = st.columns([2, 1, 1, 1, 1])
         with col1:
             if st.button(f"📋 {task['Task']}", key=f"task_{task['id']}", help="點擊查看任務詳情"):
@@ -141,20 +220,39 @@ def show_main_view():
     if st.session_state.tasks:
         col1, col2, col3, col4 = st.columns(4)
         with col1:
-            total_tasks = len(st.session_state.tasks)
-            st.metric("總任務數", total_tasks)
+            st.markdown(f"""
+                <div class="metric-card">
+                    <div class="metric-value">{len(st.session_state.tasks)}</div>
+                    <div class="metric-label">總任務數</div>
+                </div>
+            """, unsafe_allow_html=True)
         
         with col2:
             completed_tasks = len([t for t in st.session_state.tasks if t['Status'] == '已完成'])
-            st.metric("已完成任務", completed_tasks)
+            st.markdown(f"""
+                <div class="metric-card">
+                    <div class="metric-value">{completed_tasks}</div>
+                    <div class="metric-label">已完成任務</div>
+                </div>
+            """, unsafe_allow_html=True)
         
         with col3:
             in_progress = len([t for t in st.session_state.tasks if t['Status'] == '進行中'])
-            st.metric("進行中任務", in_progress)
+            st.markdown(f"""
+                <div class="metric-card">
+                    <div class="metric-value">{in_progress}</div>
+                    <div class="metric-label">進行中任務</div>
+                </div>
+            """, unsafe_allow_html=True)
         
         with col4:
-            completion_rate = (completed_tasks / total_tasks * 100) if total_tasks > 0 else 0
-            st.metric("完成率", f"{completion_rate:.1f}%")
+            completion_rate = (completed_tasks / len(st.session_state.tasks) * 100) if st.session_state.tasks else 0
+            st.markdown(f"""
+                <div class="metric-card">
+                    <div class="metric-value">{completion_rate:.1f}%</div>
+                    <div class="metric-label">完成率</div>
+                </div>
+            """, unsafe_allow_html=True)
         
         show_task_table()
         show_charts()
@@ -276,6 +374,13 @@ def show_detail_view():
                     current_task['Checklist'] = task['Checklist']
                     st.success("新檢查項目添加成功！")
                     st.rerun()
+                    
+def calculate_progress(task):
+    if task['Checklist']:
+        completed = sum(1 for item in task['Checklist'] if item['completed'])
+        return (completed / len(task['Checklist'])) * 100
+    return 0
+
 
 def login():
     if not st.session_state.logged_in:
