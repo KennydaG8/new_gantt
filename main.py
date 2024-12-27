@@ -17,12 +17,7 @@ st.set_page_config(
 )
 
 # 初始化 session state
-if 'tasks' not in st.session_state:
-    st.session_state.tasks = data_handler.load_tasks()
-if 'current_view' not in st.session_state:
-    st.session_state.current_view = 'main'
-if 'current_task' not in st.session_state:
-    st.session_state.current_task = None
+
 
 # 用戶設置
 USERS = {
@@ -42,7 +37,14 @@ if 'username' not in st.session_state:
     st.session_state.username = None
 if 'role' not in st.session_state:
     st.session_state.role = None
-
+    
+if 'tasks' not in st.session_state:
+    st.session_state.tasks = data_handler.load_tasks()
+if 'current_view' not in st.session_state:
+    st.session_state.current_view = 'main'
+if 'current_task' not in st.session_state:
+    st.session_state.current_task = None
+    
 def show_task_table():
     for task in st.session_state.tasks:
         col1, col2, col3, col4, col5 = st.columns([2, 1, 1, 1, 1])
