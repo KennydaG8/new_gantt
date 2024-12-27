@@ -24,10 +24,6 @@ if 'current_view' not in st.session_state:
 if 'current_task' not in st.session_state:
     st.session_state.current_task = None
 
-# 在添加新任務時保存數據
-st.session_state.tasks.append(new_task)
-data_handler.save_tasks(st.session_state.tasks)
-st.success("任務添加成功！")
 
 # 在更新任務狀態時保存數據
 task['Status'] = new_status
