@@ -19,69 +19,120 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 添加 Material Design Lite CSS 和 JS
+# 添加自定義 CSS
 st.markdown("""
-    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
     <style>
-    .mdl-layout__header {
-        background-color: #3f51b5;
+    /* 整體應用樣式 */
+    .stApp {
+        background-color: #f5f7fa;
     }
-    .mdl-layout__drawer-button {
-        color: white;
+    
+    /* 標題樣式 */
+    h1 {
+        background: linear-gradient(45deg, #2193b0, #6dd5ed);
+        color: white !important;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
-    .mdl-button--fab.mdl-button--colored {
-        background-color: #ff4081;
-    }
-    .mdl-card {
-        min-height: 100px;
-        width: 100%;
-        margin-bottom: 20px;
-        padding: 16px;
-    }
-    .mdl-card__title {
-        color: #3f51b5;
-    }
-    .mdl-data-table {
-        width: 100%;
-    }
+    
+    /* 卡片樣式 */
     .metric-card {
         background: white;
-        border-radius: 4px;
+        border-radius: 15px;
         padding: 20px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+    }
+    .metric-card:hover {
+        transform: translateY(-5px);
     }
     .metric-value {
-        font-size: 24px;
+        font-size: 28px;
         font-weight: bold;
-        color: #3f51b5;
+        background: linear-gradient(45deg, #2193b0, #6dd5ed);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 5px;
     }
     .metric-label {
+        color: #555;
+        font-size: 16px;
+        font-weight: 500;
+    }
+    
+    /* 任務列表樣式 */
+    .task-row {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        transition: transform 0.2s ease;
+    }
+    .task-row:hover {
+        transform: scale(1.01);
+    }
+    .task-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #2193b0;
+        margin-bottom: 10px;
+    }
+    .task-info {
         color: #666;
         font-size: 14px;
     }
+    .task-status {
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+    }
+    .status-pending {
+        background-color: #ffecb3;
+        color: #996b00;
+    }
+    .status-progress {
+        background-color: #b3e5fc;
+        color: #0051a8;
+    }
+    .status-completed {
+        background-color: #c8e6c9;
+        color: #1b5e20;
+    }
+    
+    /* 按鈕樣式 */
     .stButton > button {
-        background-color: #3f51b5;
+        background: linear-gradient(45deg, #2193b0, #6dd5ed);
         color: white;
         border: none;
-        border-radius: 4px;
-        padding: 8px 16px;
-        text-transform: uppercase;
+        padding: 10px 25px;
+        border-radius: 25px;
         font-weight: 500;
-        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
     }
-    .task-row {
+    .stButton > button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    
+    /* 側邊欄樣式 */
+    .css-1d391kg {
+        background: linear-gradient(180deg, #2193b0, #6dd5ed);
+    }
+    .css-1d391kg .stButton > button {
         background: white;
-        padding: 12px;
-        border-radius: 4px;
-        margin-bottom: 8px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        color: #2193b0;
+    }
+    
+    /* 進度條樣式 */
+    .stProgress > div > div {
+        background-color: #2193b0;
     }
     </style>
 """, unsafe_allow_html=True)
-
 
 # 初始化 session state
 
@@ -101,21 +152,28 @@ if 'current_task' not in st.session_state:
     
 def show_task_table():
     for task in st.session_state.tasks:
+        status_class = get_status_class(task['Status'])
+        progress = calculate_progress(task)
+        
         st.markdown(f"""
             <div class="task-row">
-                <div class="mdl-grid">
-                    <div class="mdl-cell mdl-cell--8-col">
-                        <h4 style="margin:0">{task['Task']}</h4>
-                        <small>開始: {task['Start']} | 結束: {task['Finish']} | 狀態: {task['Status']}</small>
+                <div class="task-title">{task['Task']}</div>
+                <div class="task-info">
+                    <span>開始: {task['Start']}</span> | 
+                    <span>結束: {task['Finish']}</span> | 
+                    <span class="task-status {status_class}">{task['Status']}</span>
+                </div>
+                <div style="margin-top: 10px;">
+                    <div style="background: #eee; border-radius: 10px; height: 6px;">
+                        <div style="width: {progress}%; height: 100%; background: #2193b0; border-radius: 10px;"></div>
                     </div>
-                    <div class="mdl-cell mdl-cell--4-col" style="text-align:right">
-                        <div class="progress-info">
-                            進度: {calculate_progress(task):.1f}%
-                        </div>
+                    <div style="text-align: right; font-size: 12px; color: #666; margin-top: 5px;">
+                        進度: {progress:.1f}%
                     </div>
                 </div>
             </div>
         """, unsafe_allow_html=True)
+        
         col1, col2, col3, col4, col5 = st.columns([2, 1, 1, 1, 1])
         with col1:
             if st.button(f"📋 {task['Task']}", key=f"task_{task['id']}", help="點擊查看任務詳情"):
@@ -212,6 +270,15 @@ def show_charts():
         st.plotly_chart(fig, use_container_width=True)
     else:
         st.info("暫無任務數據")
+        
+def get_status_class(status):
+    if status == '未開始':
+        return 'status-pending'
+    elif status == '進行中':
+        return 'status-progress'
+    else:
+        return 'status-completed'
+
 
 def show_main_view():
     # 主要內容區域
@@ -256,6 +323,44 @@ def show_main_view():
         
         show_task_table()
         show_charts()
+
+def show_metrics():
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-value">{len(st.session_state.tasks)}</div>
+                <div class="metric-label">總任務數</div>
+            </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        completed_tasks = len([t for t in st.session_state.tasks if t['Status'] == '已完成'])
+        st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-value">{completed_tasks}</div>
+                <div class="metric-label">已完成任務</div>
+            </div>
+        """, unsafe_allow_html=True)
+    
+    with col3:
+        in_progress = len([t for t in st.session_state.tasks if t['Status'] == '進行中'])
+        st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-value">{in_progress}</div>
+                <div class="metric-label">進行中任務</div>
+            </div>
+        """, unsafe_allow_html=True)
+    
+    with col4:
+        completion_rate = (completed_tasks / len(st.session_state.tasks) * 100) if st.session_state.tasks else 0
+        st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-value">{completion_rate:.1f}%</div>
+                <div class="metric-label">完成率</div>
+            </div>
+        """, unsafe_allow_html=True)
+
 
 def show_detail_view():
     current_task = st.session_state.current_task
