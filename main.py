@@ -5,7 +5,10 @@ import plotly.figure_factory as ff
 import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime
+from config import USERS
 from utils.data_handler import DataHandler
+
+# 初始化數據處理器
 data_handler = DataHandler()
 
 # 設置頁面配置
@@ -19,25 +22,12 @@ st.set_page_config(
 # 初始化 session state
 
 
-# 用戶設置
-USERS = {
-    "admin": {
-        "password": "admin123",
-        "role": "admin"
-    },
-    "viewer": {
-        "password": "viewer123",
-        "role": "viewer"
-    }
-}
-
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
 if 'username' not in st.session_state:
     st.session_state.username = None
 if 'role' not in st.session_state:
     st.session_state.role = None
-    
 if 'tasks' not in st.session_state:
     st.session_state.tasks = data_handler.load_tasks()
 if 'current_view' not in st.session_state:
