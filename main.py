@@ -40,10 +40,7 @@ if 'role' not in st.session_state:
     
 if 'tasks' not in st.session_state:
     st.session_state.tasks = data_handler.load_tasks()
-if 'current_view' not in st.session_state:
-    st.session_state.current_view = 'main'
-if 'current_task' not in st.session_state:
-    st.session_state.current_task = None
+
     
 def show_task_table():
     for task in st.session_state.tasks:
