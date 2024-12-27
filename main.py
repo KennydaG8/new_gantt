@@ -262,7 +262,10 @@ def show_charts():
             fig_status.update_layout(
                 showlegend=True,
                 height=400,
-                annotations=[dict(text='狀態', x=0.5, y=0.5, font_size=20, showarrow=False)]
+                annotations=[dict(text='狀態', x=0.5, y=0.5, font_size=20, showarrow=False)],
+                paper_bgcolor='#2D2D2D',  # 添加這行
+                plot_bgcolor='#2D2D2D',   # 添加這行
+                font=dict(color='white')   # 添加這行
             )
             st.plotly_chart(fig_status, use_container_width=True)
         else:
@@ -282,7 +285,10 @@ def show_charts():
             fig_category.update_layout(
                 showlegend=True,
                 height=400,
-                annotations=[dict(text='類別', x=0.5, y=0.5, font_size=20, showarrow=False)]
+                annotations=[dict(text='類別', x=0.5, y=0.5, font_size=20, showarrow=False)],
+                paper_bgcolor='#2D2D2D',  # 添加這行
+                plot_bgcolor='#2D2D2D',   # 添加這行
+                font=dict(color='white')   # 添加這行
             )
             st.plotly_chart(fig_category, use_container_width=True)
         else:
@@ -312,8 +318,20 @@ def show_charts():
             xaxis_title='日期',
             yaxis_title='任務',
             height=400 + (len(df_gantt) * 30),
-            font=dict(size=10),
-            showlegend=True
+            font=dict(size=10, color='white'),  # 修改這行
+            showlegend=True,
+            paper_bgcolor='#2D2D2D',  # 添加這行
+            plot_bgcolor='#2D2D2D',   # 添加這行
+            xaxis=dict(  # 添加這部分
+                gridcolor='#444444',
+                tickcolor='white',
+                tickfont=dict(color='white')
+            ),
+            yaxis=dict(  # 添加這部分
+                gridcolor='#444444',
+                tickcolor='white',
+                tickfont=dict(color='white')
+            )
         )
         st.plotly_chart(fig, use_container_width=True)
     else:
