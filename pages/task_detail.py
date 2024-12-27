@@ -139,7 +139,7 @@ if current_task:
     
     with col1:
         if st.button("返回甘特圖", type="primary", key="return_button"):
-            st.switch_page("main.py")
+            st.switch_page("Main.py")
     
     # 只有管理員可以使用這些功能
     if st.session_state.role == "admin":
@@ -188,4 +188,4 @@ if current_task:
 else:
     st.error("無法找到任務信息！")
     if st.button("返回甘特圖", key="error_return"):
-        st.switch_page("main.py")
+        st.switch_page("Main.py")
