@@ -174,27 +174,6 @@ def show_task_table():
             </div>
         """, unsafe_allow_html=True)
         
-        col1, col2, col3, col4, col5 = st.columns([2, 1, 1, 1, 1])
-        with col1:
-            if st.button(f"📋 {task['Task']}", key=f"task_{task['id']}", help="點擊查看任務詳情"):
-                st.session_state.current_task = task
-                st.session_state.current_view = 'detail'
-                st.rerun()
-        with col2:
-            st.write(f"開始: {task['Start']}")
-        with col3:
-            st.write(f"結束: {task['Finish']}")
-        with col4:
-            st.write(f"狀態: {task['Status']}")
-        with col5:
-            if task['Checklist']:
-                completed = sum(1 for item in task['Checklist'] if item['completed'])
-                total = len(task['Checklist'])
-                progress = (completed / total) * 100
-                st.write(f"進度: {progress:.1f}%")
-            else:
-                st.write("進度: 0%")
-
 def show_charts():
     # 創建兩列布局用於顯示圓餅圖
     col1, col2 = st.columns(2)
