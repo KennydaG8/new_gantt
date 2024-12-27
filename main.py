@@ -102,16 +102,18 @@ st.markdown("""
         background-color: #c8e6c9;
         color: #1b5e20;
     }
-    
-    /* 按鈕樣式 */
+
+    /* 任務按鈕樣式 */
     .stButton > button {
         background: linear-gradient(45deg, #2193b0, #6dd5ed);
         color: white;
         border: none;
-        padding: 10px 25px;
-        border-radius: 25px;
+        padding: 8px 16px;
+        border-radius: 20px;
         font-weight: 500;
         transition: all 0.3s ease;
+        width: 100%;
+        margin: 5px 0;
     }
     .stButton > button:hover {
         transform: translateY(-2px);
@@ -125,6 +127,23 @@ st.markdown("""
     .css-1d391kg .stButton > button {
         background: white;
         color: #2193b0;
+    }
+
+    /* 進度條容器 */
+    .progress-container {
+        margin-top: 10px;
+        background: #eee;
+        border-radius: 10px;
+        height: 6px;
+        overflow: hidden;
+    }
+
+    /* 進度條 */
+    .progress-bar {
+        height: 100%;
+        background: linear-gradient(45deg, #2193b0, #6dd5ed);
+        border-radius: 10px;
+        transition: width 0.3s ease;
     }
     
     /* 進度條樣式 */
@@ -155,24 +174,54 @@ def show_task_table():
         status_class = get_status_class(task['Status'])
         progress = calculate_progress(task)
         
+        # 使用HTML美化外觀，但保留Streamlit按鈕功能
         st.markdown(f"""
             <div class="task-row">
-                <div class="task-title">{task['Task']}</div>
-                <div class="task-info">
-                    <span>開始: {task['Start']}</span> | 
-                    <span>結束: {task['Finish']}</span> | 
-                    <span class="task-status {status_class}">{task['Status']}</span>
-                </div>
-                <div style="margin-top: 10px;">
-                    <div style="background: #eee; border-radius: 10px; height: 6px;">
-                        <div style="width: {progress}%; height: 100%; background: #2193b0; border-radius: 10px;"></div>
-                    </div>
-                    <div style="text-align: right; font-size: 12px; color: #666; margin-top: 5px;">
-                        進度: {progress:.1f}%
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div style="flex-grow: 1;">
+                        <div class="task-title">{task['Task']}</div>
+                        <div class="task-info">
+                            <span>開始: {task['Start']}</span> | 
+                            <span>結束: {task['Finish']}</span> | 
+                            <span class="task-status {status_class}">{task['Status']}</span>
+                        </div>
                     </div>
                 </div>
             </div>
         """, unsafe_allow_html=True)
+        
+        # 保留原有的功能性按鈕，但使用更漂亮的樣式
+        col1, col2 = st.columns([2, 8])
+        with col1:
+            if st.button(f"📋 查看詳情", key=f"task_{task['id']}", help="點擊查看任務詳情"):
+                st.session_state.current_task = task
+                st.session_state.current_view = 'detail'
+                st.rerun()
+        
+        # 顯示進度條
+        with col2:
+            if task['Checklist']:
+                completed = sum(1 for item in task['Checklist'] if item['completed'])
+                total = len(task['Checklist'])
+                progress = (completed / total) * 100
+                st.markdown(f"""
+                    <div style="margin-top: 10px;">
+                        <div style="background: #eee; border-radius: 10px; height: 6px;">
+                            <div style="width: {progress}%; height: 100%; background: #2193b0; border-radius: 10px;"></div>
+                        </div>
+                        <div style="text-align: right; font-size: 12px; color: #666; margin-top: 5px;">
+                            進度: {progress:.1f}%
+                        </div>
+                    </div>
+                """, unsafe_allow_html=True)
+            else:
+                st.markdown("""
+                    <div style="text-align: right; font-size: 12px; color: #666;">
+                        進度: 0%
+                    </div>
+                """, unsafe_allow_html=True)
+        
+        st.markdown("<hr style='margin: 10px 0; border: none; border-top: 1px solid #eee;'>", unsafe_allow_html=True)
         
 def show_charts():
     # 創建兩列布局用於顯示圓餅圖
