@@ -99,8 +99,8 @@ def show_task_table():
         with col1:
             if st.button(f"📋 {task['Task']}", key=f"task_{task['id']}", help="點擊查看任務詳情"):
                 st.session_state.current_task = task
-                # 使用查詢參數而不是直接切換頁面
-                st.experimental_set_query_params(page="task_detail", task_id=task['id'])
+                st.query_params["page"] = "task_detail"
+                st.query_params["task_id"] = task['id']
                 st.rerun()
         with col2:
             st.write(f"開始: {task['Start']}")
