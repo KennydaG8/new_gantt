@@ -2,6 +2,19 @@
 import streamlit as st
 from datetime import datetime
 
+# 檢查是否應該顯示這個頁面
+if not st.query_params.get("page") == "task_detail":
+    st.switch_page("main.py")
+
+# 獲取當前任務
+current_task = st.session_state.get('current_task')
+if not current_task:
+    st.error("無法找到任務信息！")
+    if st.button("返回甘特圖", key="error_return"):
+        st.query_params.clear()
+        st.rerun()
+    st.stop()
+
 # 設置頁面配置
 st.set_page_config(page_title="任務詳情", layout="wide")
 
