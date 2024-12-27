@@ -24,16 +24,6 @@ if 'current_view' not in st.session_state:
 if 'current_task' not in st.session_state:
     st.session_state.current_task = None
 
-
-# 在更新任務狀態時保存數據
-task['Status'] = new_status
-data_handler.save_tasks(st.session_state.tasks)
-
-# 在導入 CSV 時保存數據
-st.session_state.tasks = tasks
-data_handler.save_tasks(tasks)
-
-
 # 用戶設置
 USERS = {
     "admin": {
