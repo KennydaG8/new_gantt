@@ -5,6 +5,8 @@ import plotly.figure_factory as ff
 import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime
+from utils.data_handler import DataHandler
+data_handler = DataHandler()
 
 # 設置頁面配置
 st.set_page_config(
@@ -16,11 +18,25 @@ st.set_page_config(
 
 # 初始化 session state
 if 'tasks' not in st.session_state:
-    st.session_state.tasks = []
+    st.session_state.tasks = data_handler.load_tasks()
 if 'current_view' not in st.session_state:
     st.session_state.current_view = 'main'
 if 'current_task' not in st.session_state:
     st.session_state.current_task = None
+
+# 在添加新任務時保存數據
+st.session_state.tasks.append(new_task)
+data_handler.save_tasks(st.session_state.tasks)
+st.success("任務添加成功！")
+
+# 在更新任務狀態時保存數據
+task['Status'] = new_status
+data_handler.save_tasks(st.session_state.tasks)
+
+# 在導入 CSV 時保存數據
+st.session_state.tasks = tasks
+data_handler.save_tasks(tasks)
+
 
 # 用戶設置
 USERS = {
