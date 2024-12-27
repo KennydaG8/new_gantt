@@ -24,25 +24,25 @@ st.markdown("""
     <style>
     /* 整體應用樣式 */
     .stApp {
-        background-color: #f5f7fa;
+        background-color: #1E1E1E;
     }
     
     /* 標題樣式 */
     h1 {
-        background: linear-gradient(45deg, #2193b0, #6dd5ed);
+        background: linear-gradient(45deg, #2C3E50, #3498DB);
         color: white !important;
         padding: 20px;
         border-radius: 10px;
         margin-bottom: 30px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
     
     /* 卡片樣式 */
     .metric-card {
-        background: white;
+        background: #2D2D2D;
         border-radius: 15px;
         padding: 20px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         transition: transform 0.3s ease;
     }
     .metric-card:hover {
@@ -51,24 +51,24 @@ st.markdown("""
     .metric-value {
         font-size: 28px;
         font-weight: bold;
-        background: linear-gradient(45deg, #2193b0, #6dd5ed);
+        background: linear-gradient(45deg, #2C3E50, #3498DB);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin-bottom: 5px;
     }
     .metric-label {
-        color: #555;
+        color: #CCCCCC;
         font-size: 16px;
         font-weight: 500;
     }
     
     /* 任務列表樣式 */
     .task-row {
-        background: white;
+        background: #2D2D2D;
         padding: 20px;
         border-radius: 15px;
         margin-bottom: 15px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         transition: transform 0.2s ease;
     }
     .task-row:hover {
@@ -77,11 +77,11 @@ st.markdown("""
     .task-title {
         font-size: 18px;
         font-weight: 600;
-        color: #2193b0;
+        color: #3498DB;
         margin-bottom: 10px;
     }
     .task-info {
-        color: #666;
+        color: #CCCCCC;
         font-size: 14px;
     }
     .task-status {
@@ -91,21 +91,21 @@ st.markdown("""
         font-weight: 500;
     }
     .status-pending {
-        background-color: #ffecb3;
-        color: #996b00;
+        background-color: #2C3E50;
+        color: #FFF;
     }
     .status-progress {
-        background-color: #b3e5fc;
-        color: #0051a8;
+        background-color: #2980B9;
+        color: #FFF;
     }
     .status-completed {
-        background-color: #c8e6c9;
-        color: #1b5e20;
+        background-color: #27AE60;
+        color: #FFF;
     }
-
+    
     /* 任務按鈕樣式 */
     .stButton > button {
-        background: linear-gradient(45deg, #2193b0, #6dd5ed);
+        background: linear-gradient(45deg, #2C3E50, #3498DB);
         color: white;
         border: none;
         padding: 8px 16px;
@@ -117,38 +117,58 @@ st.markdown("""
     }
     .stButton > button:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
     
     /* 側邊欄樣式 */
     .css-1d391kg {
-        background: linear-gradient(180deg, #2193b0, #6dd5ed);
+        background: linear-gradient(180deg, #2C3E50, #3498DB);
     }
     .css-1d391kg .stButton > button {
-        background: white;
-        color: #2193b0;
+        background: #2D2D2D;
+        color: #3498DB;
     }
-
+    
     /* 進度條容器 */
     .progress-container {
         margin-top: 10px;
-        background: #eee;
+        background: #2D2D2D;
         border-radius: 10px;
         height: 6px;
         overflow: hidden;
     }
-
+    
     /* 進度條 */
     .progress-bar {
         height: 100%;
-        background: linear-gradient(45deg, #2193b0, #6dd5ed);
+        background: linear-gradient(45deg, #2C3E50, #3498DB);
         border-radius: 10px;
         transition: width 0.3s ease;
     }
     
     /* 進度條樣式 */
     .stProgress > div > div {
-        background-color: #2193b0;
+        background-color: #3498DB;
+    }
+
+    /* 輸入框樣式 */
+    .stTextInput > div > div > input {
+        background-color: #2D2D2D;
+        color: white;
+        border-color: #3D3D3D;
+    }
+    
+    /* 下拉選單樣式 */
+    .stSelectbox > div > div {
+        background-color: #2D2D2D;
+        color: white;
+    }
+    
+    /* 文本區域樣式 */
+    .stTextArea textarea {
+        background-color: #2D2D2D;
+        color: white;
+        border-color: #3D3D3D;
     }
     </style>
 """, unsafe_allow_html=True)
